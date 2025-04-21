@@ -1,46 +1,101 @@
-# Getting Started with Create React App
+# 🔽 Lobox Multi-Select Component
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A reusable multi-select dropdown component built with **React**, **TypeScript**,
+and **SCSS**.  
+Users can **select**, **unselect**, and **add new items** dynamically. Includes
+dropdown animation, outside click handling, and search filtering.
 
-## Available Scripts
+## ✨ Features
 
-In the project directory, you can run:
+- ✅ Select multiple items
+- ✅ Search and filter options
+- ✅ Add new items by typing + pressing `Enter`
+- ✅ Remove selected items by clicking them again
+- ✅ Close dropdown on outside click
+- ✅ Smooth dropdown animations
+- ✅ Responsive and accessible styles
 
-### `npm start`
+## 🚀 Getting Started
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+This project was bootstrapped with
+[Create React App](https://github.com/facebook/create-react-app).
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### 📦 Installation
 
-### `npm test`
+Clone the repository and install dependencies:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+git clone https://github.com/your-username/lobox-multiselect.git
+cd lobox-multiselect
+npm install
+```
 
-### `npm run build`
+### 🧪 Development Server
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+To run the app locally:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+npm start
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Open [http://localhost:3000](http://localhost:3000) in your browser to see the
+result.
 
-### `npm run eject`
+### 🏗 Production Build
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+To create an optimized production build:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm run build
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## 🧱 Component Usage
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```tsx
+import MultiSelect from './components/MultiSelect';
 
-## Learn More
+const options = [
+  { label: 'React', value: 'react' },
+  { label: 'Vue', value: 'vue' },
+  { label: 'Angular', value: 'angular' },
+];
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+<MultiSelect
+  options={options}
+  onChange={(selected) => console.log(selected)}
+/>;
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 📁 Project Structure
+
+```
+.
+├── public
+├── src
+│   ├── components
+│   │   └── MultiSelect.tsx
+│   │   └── MultiSelect.scss
+│   ├── types
+│   │   └── index.ts
+│   ├── App.tsx
+│   ├── App.scss
+│   └── index.tsx
+├── package.json
+└── README.md
+```
+
+## 🛠 Technologies
+
+- ⚛️ React
+- ⛑ TypeScript
+- 🎨 SCSS
+- 🧠 nanoid (for generating unique IDs)
+- 💡 React hooks (`useState`, `useRef`, `useEffect`)
+
+## 📃 License
+
+MIT — Free for personal and commercial use.
+
+---
+
+Let’s build better UIs 🚀
