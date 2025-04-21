@@ -1,7 +1,7 @@
-// src/components/MultiSelect.tsx
 import { useEffect, useRef, useState } from 'react';
 import './MultiSelect.scss';
-import { MultiSelectProps } from '../types'; // ✅ از این استفاده کن
+import { MultiSelectProps } from '../types';
+import { nanoid } from 'nanoid';
 
 type Option = {
   label: string;
@@ -33,39 +33,75 @@ export default function MultiSelect({ options, onChange }: MultiSelectProps) {
       setFilteredOptions(options);
     } else {
       const value = inputValue.toLowerCase();
-      setFilteredOptions(
-        options.filter((opt) => opt.label.toLowerCase().includes(value)),
+      const filtered = options.filter((opt) =>
+        opt.label.toLowerCase().includes(value),
       );
+      setFilteredOptions(filtered);
     }
   }, [inputValue, options]);
 
   const handleSelect = (option: Option) => {
-    if (!selected.find((s) => s.value === option.value)) {
-      const newSelected = [...selected, option];
-      setSelected(newSelected);
-      onChange(newSelected);
+    const alreadySelected = selected.find((s) => s.value === option.value);
+    let newSelected;
+    if (alreadySelected) {
+      newSelected = selected.filter((s) => s.value !== option.value);
+    } else {
+      newSelected = [...selected, option];
     }
+    setSelected(newSelected);
+    onChange(newSelected);
     setInputValue('');
   };
 
   const handleAddNew = () => {
     const trimmed = inputValue.trim();
-    if (trimmed && !options.find((opt) => opt.label === trimmed)) {
-      const newOption = { label: trimmed, value: trimmed };
+    if (!trimmed) return;
+
+    const alreadyExists =
+      selected.some((s) => s.label === trimmed) ||
+      options.some((opt) => opt.label === trimmed);
+
+    if (!alreadyExists) {
+      const newOption = {
+        label: trimmed,
+        value: `${trimmed}-${nanoid()}`,
+      };
       const newSelected = [...selected, newOption];
       setSelected(newSelected);
       onChange(newSelected);
     }
+
     setInputValue('');
+  };
+
+  const handleRemove = (value: string) => {
+    const updated = selected.filter((item) => item.value !== value);
+    setSelected(updated);
+    onChange(updated);
   };
 
   return (
     <div
       className='multi-select'
       ref={dropdownRef}>
+      <div className='selected-tags'>
+        {selected.map((tag) => (
+          <div
+            className='tag'
+            key={tag.value}>
+            {tag.label}
+            <span
+              className='remove'
+              onClick={() => handleRemove(tag.value)}>
+              ✕
+            </span>
+          </div>
+        ))}
+      </div>
+
       <div
         className='input-box'
-        onClick={() => setIsOpen(!isOpen)}>
+        onClick={() => setIsOpen(true)}>
         <input
           type='text'
           value={inputValue}
@@ -79,21 +115,33 @@ export default function MultiSelect({ options, onChange }: MultiSelectProps) {
         />
         <span className='arrow'>▾</span>
       </div>
+
       {isOpen && (
         <div className='dropdown'>
-          {filteredOptions.map((opt) => (
+          {filteredOptions.length === 0 ? (
             <div
-              key={opt.value}
-              className={`dropdown-item ${
-                selected.some((s) => s.value === opt.value) ? 'selected' : ''
-              }`}
-              onClick={() => handleSelect(opt)}>
-              {opt.label}
-              {selected.some((s) => s.value === opt.value) && (
-                <span className='check'>✔</span>
-              )}
+              className='no-result'
+              onClick={handleAddNew}>
+              <span className='plus-icon'>+</span>
+              <span className='add-label'>
+                Add "<strong>{inputValue}</strong>"
+              </span>
             </div>
-          ))}
+          ) : (
+            filteredOptions.map((opt) => (
+              <div
+                key={opt.value}
+                className={`dropdown-item ${
+                  selected.some((s) => s.value === opt.value) ? 'selected' : ''
+                }`}
+                onClick={() => handleSelect(opt)}>
+                {opt.label}
+                {selected.some((s) => s.value === opt.value) && (
+                  <span className='check'>✔</span>
+                )}
+              </div>
+            ))
+          )}
         </div>
       )}
     </div>

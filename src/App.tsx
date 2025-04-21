@@ -8,24 +8,26 @@ type Option = {
 };
 
 function App() {
-  const options: Option[] = [
+  const [selectedItems, setSelectedItems] = useState<Option[]>([
     { label: 'React', value: 'react' },
     { label: 'Vue', value: 'vue' },
     { label: 'Angular', value: 'angular' },
     { label: 'Svelte', value: 'svelte' },
-  ];
-
-  const [selectedItems, setSelectedItems] = useState<Option[]>([]);
+  ]);
 
   const handleChange = (items: Option[]) => {
-    setSelectedItems(items);
+    setSelectedItems((prev) => {
+      const existingLabels = new Set(prev.map((item) => item.label));
+      const newItems = items.filter((item) => !existingLabels.has(item.label));
+      return [...prev, ...newItems];
+    });
   };
 
   return (
     <div className='app-container'>
       <h1 className='title'>Lobox Multi Select</h1>
       <MultiSelect
-        options={options}
+        options={selectedItems}
         onChange={handleChange}
       />
     </div>
